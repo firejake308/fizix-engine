@@ -2,6 +2,8 @@ package logic;
 
 import java.util.ArrayList;
 
+import graphics.MainFrame;
+
 public class Universe {
 	/**
 	 * A registry of all objects in existence in the universe.
@@ -11,6 +13,7 @@ public class Universe {
 	public static void main(String[] args) {
 		PointObject p1 = new PointObject(-10, 0, 1000, 0);
 		PointObject p2 = new PointObject(10, 0, 10, 0);
+		MainFrame mainFrame = new MainFrame();
 		
 		final int FRAME_RATE = 60;
 		final double FRAME_LENGTH = 1e9/FRAME_RATE;
@@ -63,8 +66,9 @@ public class Universe {
 		x++;
 		for(PhysicsObject o: allObjects) {
 			o.update(seconds);
-			if(x % 60 == 0)
-				System.out.println(o);
+			// in case of debug, break comment
+			//if(x % 60 == 0)
+				//System.out.println(o);
 		}
 	}
 }
