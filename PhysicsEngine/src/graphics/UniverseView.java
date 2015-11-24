@@ -11,6 +11,9 @@ import java.util.ListIterator;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
+import logic.PhysicsObject;
+import logic.Universe;
+
 public class UniverseView extends JPanel {
 	private LinkedList<Integer> gridX = new LinkedList<Integer>();
 	private ListIterator<Integer> gridXIter = gridX.listIterator();
@@ -21,14 +24,17 @@ public class UniverseView extends JPanel {
 	private int startY = -1;
 	private int endY = 0;
 	private int pixelsPerMeter = 100;
+	private Point origin = new Point(350, 167);
 	
 	public UniverseView() {
 		setBackground(Color.WHITE);
 		
-		
 		// add resize listener to update size of components
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
+				// update origin
+				origin = new Point(getWidth()/2, getHeight()/2);
+				
 				// create grid
 				for(int x = -getWidth()/2/pixelsPerMeter; x <= getWidth()/2/pixelsPerMeter+1; x++) {
 					gridXIter.add(getWidth()/2 + x*pixelsPerMeter);
@@ -55,12 +61,16 @@ public class UniverseView extends JPanel {
 		});
 		this.addMouseMotionListener(new MouseAdapter() {
 			public void mouseDragged(MouseEvent e) {
-				if(startX == -1 && startY == -1)
-					return;
+				//if(startX == -1 && startY == -1)
+					//return;
 				// store location where mouse released
 				endX = e.getX();
 				endY = e.getY();
 				
+				// update origin
+				origin.x += endX - startX;
+				origin.y += endY - startY;
+								
 				// move grid lines according to delta mouse location
 				gridXIter = gridX.listIterator();
 				while(gridXIter.hasNext()) {
@@ -82,6 +92,8 @@ public class UniverseView extends JPanel {
 						newY += getHeight()/pixelsPerMeter*pixelsPerMeter;
 					gridYIter.set(newY);
 				}
+				
+				
 				startX = endX;
 				startY = endY;
 				repaint();
@@ -104,6 +116,15 @@ public class UniverseView extends JPanel {
 		while(gridYIter.hasNext()) {
 			int y = gridYIter.next();
 			g.drawLine(0, y, getWidth(), y);
+		}
+		
+		// draw objects
+		ListIterator<PhysicsObject> iter = Universe.allObjects.listIterator();
+		while(iter.hasNext()) {
+			PhysicsObject obj = iter.next();
+			int x = (int)(obj.getX()*pixelsPerMeter + origin.x);
+			int y = (int)(obj.getY()*pixelsPerMeter + origin.y);
+			g.fillOval(x-5, y-5, 10, 10); // TODO update for non-point objects
 		}
 	}
 }

@@ -39,7 +39,7 @@ public class GravitationalForce extends Force {
 	 */
 	private static Vector getForceBetween(PhysicsObject agent, PhysicsObject obj) {
 		double magnitude = magnitudeBetween(agent, obj);
-		double angle = Math.atan2(obj.getY()-agent.getY(), obj.getX()-agent.getX());
+		double angle = Math.atan2(agent.getY()-obj.getY(), agent.getX()-obj.getX());
 		double x = magnitude*Math.cos(angle);
 		double y = magnitude*Math.sin(angle);
 		if(angle == Math.PI/2 || angle == -Math.PI)

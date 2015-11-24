@@ -11,8 +11,8 @@ public class Universe {
 	public static ArrayList<PhysicsObject> allObjects = new ArrayList<PhysicsObject>();
 
 	public static void main(String[] args) {
-		PointObject p1 = new PointObject(-10, 0, 1000, 0);
-		PointObject p2 = new PointObject(10, 0, 10, 0);
+		PointObject p1 = new PointObject(-2, 0, 10000000, 0);
+		PointObject p2 = new PointObject(2, 0, 100, 0);
 		MainFrame mainFrame = new MainFrame();
 		
 		final int FRAME_RATE = 60;
@@ -24,7 +24,7 @@ public class Universe {
 			lastFrameTime = now;
 			
 			update(elapsedTime/1e9);
-			//draw();
+			mainFrame.repaint();
 			
 			try {
 				Thread.sleep((long) ((FRAME_LENGTH - (System.nanoTime() - lastFrameTime))/1e6));
